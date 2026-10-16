@@ -1,0 +1,57 @@
+-- =========================================================================
+-- 💾 ServerScriptService: Player DataStore System
+-- =========================================================================
+local DataStoreService = game:GetService("DataStoreService")
+local playerDataStore = DataStoreService:GetDataStore("PlayerDataStore_v1")
+
+local function onPlayerAdded(player)
+    local leaderstats = Instance.new("Folder")
+    leaderstats.Name = "leaderstats"
+    leaderstats.Parent = player
+
+    local gold = Instance.new("IntValue")
+    gold.Name = "Gold"
+    gold.Value = 0
+    gold.Parent = leaderstats
+
+    local playerKey = "Player_" .. player.UserId
+    local success, savedData = pcall(function()
+        return playerDataStore:GetAsync(playerKey)
+    end)
+
+    if success then
+        if savedData then
+            gold.Value = savedData
+            print("✅ โหลดข้อมูลสำเร็จสำหรับ: " .. player.Name .. " (Gold: " .. savedData .. ")")
+        else
+            print("🆕 ผู้เล่นใหม่: " .. player.Name .. " เริ่มต้นสร้างข้อมูลใหม่")
+        end
+    else
+        warn("⚠️ เกิดข้อผิดพลาดในการโหลดข้อมูลของ: " .. player.Name)
+    end
+end
+
+local function onPlayerRemoving(player)
+    local playerKey = "Player_" .. player.UserId
+    if player:FindFirstChild("leaderstats") and player.leaderstats:FindFirstChild("Gold") then
+        local goldToSave = player.leaderstats.Gold.Value
+        local success, errorMessage = pcall(function()
+            playerDataStore:SetAsync(playerKey, goldToSave)
+        end)
+
+        if success then
+            print("💾 บันทึกข้อมูลสำเร็จสำหรับ: " .. player.Name)
+        else
+            warn("❌ ไม่สามารถบันทึกข้อมูลของ " .. player.Name .. " ได้: " .. tostring(errorMessage))
+        end
+    end
+end
+
+game.Players.PlayerAdded:Connect(onPlayerAdded)
+game.Players.PlayerRemoving:Connect(onPlayerRemoving)
+
+game:BindToClose(function()
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        onPlayerRemoving(player)
+    end
+end)
