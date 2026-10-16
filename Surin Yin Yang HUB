@@ -159,6 +159,48 @@ SecBrowser:Button({
 })
 
 -- =========================================================================
+-- 🦗 หมวดหมู่: ระบบจิ้งหรีด
+-- =========================================================================
+local TabJingReed = Window:Tab({ Title = "ระบบจิ้งหรีด", Icon = "bug" })
+local SecJingReed = TabJingReed:Section({ Title = "ควบคุมและสั่งทำงานสคริปต์" })
+
+-- 🔗 วางลิงก์สคริปต์เดิน/สคริปต์จิ้งหรีดของคุณที่นี่
+local JingReedScriptURL = "https://raw.githubusercontent.com/hacker0030mp/Delta-executable-/refs/heads/main/ServerScriptService"
+
+SecJingReed:Button({
+    Title = "🦗 กดเพื่อเปิดใช้งานสคริปต์ (รันสคริปต์เดิน)",
+    Callback = function()
+        WindUI:Notify({ 
+            Title = "🦗 ระบบจิ้งหรีด", 
+            Content = "กำลังดึงสคริปต์และเริ่มทำงาน...", 
+            Duration = 2 
+        })
+
+        -- ดึงโค้ดสคริปต์จากลิงก์มารัน
+        local success, scriptContent = pcall(function()
+            return game:HttpGet(JingReedScriptURL)
+        end)
+
+        if success and scriptContent and scriptContent ~= "" and not string.find(scriptContent, "404") then
+            local func, err = loadstring(scriptContent)
+            if func then
+                local runSuccess, runErr = pcall(func)
+                if runSuccess then
+                    WindUI:Notify({ Title = "✅ สำเร็จ", Content = "สคริปต์จิ้งหรีดทำงานเรียบร้อยแล้ว!", Duration = 3 })
+                else
+                    WindUI:Notify({ Title = "❌ Execution Error", Content = tostring(runErr), Duration = 4 })
+                end
+            else
+                WindUI:Notify({ Title = "❌ Syntax Error", Content = tostring(err), Duration = 4 })
+            end
+        else
+            WindUI:Notify({ Title = "❌ ข้อผิดพลาด", Content = "ไม่สามารถดึงสคริปต์ได้ (เช็ค URL หรือ GitHub)", Duration = 4 })
+        end
+    end
+})
+
+
+-- =========================================================================
 -- 🤖 หมวดหมู่ที่ 3: AI สร้างสคริปต์ & ดึงสคริปต์ GitHub
 -- =========================================================================
 local TabAI = Window:Tab({ Title = "AI สร้างสคริปต์", Icon = "cpu" })
