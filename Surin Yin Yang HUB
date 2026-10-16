@@ -1,0 +1,243 @@
+-- =========================================================================
+-- ☯️ ค่ายสุรินทร์หยินหยาง - ULTIMATE DELTA SCRIPT HUB (COMPLETE EDITION)
+-- =========================================================================
+local _version = "1.6.66"
+local success, WindUI = pcall(function()
+    return loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/download/" .. _version .. "/main.lua"))()
+end)
+
+if not success or not WindUI then
+    warn("❌ Failed to load WindUI library!")
+    return
+end
+
+-- สร้างหน้าต่างหลัก (Window)
+local Window = WindUI:CreateWindow({
+    Title = "ค่ายสุรินทร์หยินหยาง - Ultimate Hub",
+    Icon = "shield",
+    Author = "Delta Script",
+    Folder = "SurinYinYangHub",
+    Size = UDim2.fromOffset(580, 460),
+    KeySystem = false,
+})
+
+WindUI:Notify({
+    Title = "ยินดีต้อนรับ",
+    Content = "โหลดสคริปต์ ค่ายสุรินทร์หยินหยาง สำเร็จ!",
+    Duration = 4
+})
+
+-- =========================================================================
+-- 💾 หมวดหมู่ที่ 1: บันทึกและรันสคริปต์ (Script Manager & Save Slots)
+-- =========================================================================
+local TabSave = Window:Tab({ Title = "บันทึกสคริปต์", Icon = "save" })
+local SecSaveSystem = TabSave:Section({ Title = "จัดการและรันสคริปต์ (Editor & Save Slots)" })
+
+local currentSlotName = "ScriptSlot_1"
+local inputScriptCode = ""
+
+SecSaveSystem:Input({
+    Title = "ชื่อช่องบันทึก / Slot Name",
+    Placeholder = "เช่น MyScript1...",
+    Callback = function(text)
+        if text and text ~= "" then currentSlotName = text end
+    end
+})
+
+SecSaveSystem:Input({
+    Title = "เนื้อหาสคริปต์ (Script Code)",
+    Placeholder = "วางโค้ดสคริปต์ของคุณที่นี่...",
+    Callback = function(text)
+        inputScriptCode = text or ""
+    end
+})
+
+SecSaveSystem:Button({
+    Title = "🟢 รันสคริปต์ปัจจุบัน",
+    Callback = function()
+        if inputScriptCode == "" then
+            WindUI:Notify({ Title = "⚠️ แจ้งเตือน", Content = "กรุณากรอกโค้ดสคริปต์ก่อนรัน", Duration = 2 })
+            return
+        end
+        local func, err = loadstring(inputScriptCode)
+        if not func then
+            WindUI:Notify({ Title = "❌ Syntax Error", Content = tostring(err), Duration = 3 })
+            return
+        end
+        local runSuccess, runErr = pcall(func)
+        if runSuccess then
+            WindUI:Notify({ Title = "✅ สำเร็จ", Content = "รันสคริปต์เรียบร้อยแล้ว", Duration = 2 })
+        else
+            WindUI:Notify({ Title = "❌ Execution Error", Content = tostring(runErr), Duration = 3 })
+        end
+    end
+})
+
+SecSaveSystem:Button({
+    Title = "💾 บันทึกสคริปต์ลงเครื่อง",
+    Callback = function()
+        if writefile then
+            local filename = currentSlotName .. ".txt"
+            local ok, err = pcall(function() writefile(filename, inputScriptCode) end)
+            if ok then
+                WindUI:Notify({ Title = "💾 บันทึกสำเร็จ", Content = "บันทึกไฟล์: " .. filename, Duration = 3 })
+            else
+                WindUI:Notify({ Title = "❌ ผิดพลาด", Content = tostring(err), Duration = 3 })
+            end
+        else
+            WindUI:Notify({ Title = "⚠️ ไม่รองรับ", Content = "ตัวรันไม่รองรับฟังก์ชัน writefile", Duration = 3 })
+        end
+    end
+})
+
+SecSaveSystem:Button({
+    Title = "📂 โหลดสคริปต์ที่บันทึกไว้",
+    Callback = function()
+        if readfile and isfile then
+            local filename = currentSlotName .. ".txt"
+            if isfile(filename) then
+                local ok, content = pcall(function() return readfile(filename) end)
+                if ok and content then
+                    inputScriptCode = content
+                    WindUI:Notify({ Title = "📂 โหลดสำเร็จ", Content = "ดึงข้อมูลจากไฟล์ " .. filename .. " แล้ว", Duration = 3 })
+                end
+            else
+                WindUI:Notify({ Title = "⚠️ ไม่พบไฟล์", Content = "ไม่พบไฟล์ชื่อ: " , Duration = 3 })
+            end
+        else
+            WindUI:Notify({ Title = "⚠️ ไม่รองรับ", Content = "ตัวรันไม่รองรับฟังก์ชันอ่านไฟล์", Duration = 3 })
+        end
+    end
+})
+
+-- =========================================================================
+-- 🌐 หมวดหมู่ใหม่: Browser Script (ดึงสคริปต์จากเว็บ/URL)
+-- =========================================================================
+local TabBrowser = Window:Tab({ Title = "Browser Script", Icon = "globe" })
+local SecBrowser = TabBrowser:Section({ Title = "ดึงและรันสคริปต์ผ่านเว็บลิงก์ (URL Loader)" })
+
+local browserUrlInput = ""
+
+SecBrowser:Input({
+    Title = "ใส่ URL / ลิงก์สคริปต์เว็บเบราว์เซอร์",
+    Placeholder = "https://raw.githubusercontent.com/...",
+    Callback = function(text)
+        browserUrlInput = text or ""
+    end
+})
+
+SecBrowser:Button({
+    Title = "🌐 ดึงและรันสคริปต์จาก Browser URL",
+    Callback = function()
+        if browserUrlInput == "" then
+            WindUI:Notify({ Title = "⚠️ แจ้งเตือน", Content = "กรุณากรอกลิงก์ URL ก่อนดึงข้อมูล", Duration = 2 })
+            return
+        end
+        
+        WindUI:Notify({ Title = "🌐 Browser Script", Content = "กำลังดึงข้อมูลจากเว็บ...", Duration = 3 })
+        
+        local getOk, scriptData = pcall(function()
+            return game:HttpGet(browserUrlInput)
+        end)
+
+        if getOk and scriptData and scriptData ~= "" and not string.find(scriptData, "404") then
+            local func, err = loadstring(scriptData)
+            if func then
+                local runOk, runErr = pcall(func)
+                if runOk then
+                    WindUI:Notify({ Title = "✅ สำเร็จ", Content = "รันสคริปต์จาก Browser URL เรียบร้อย", Duration = 3 })
+                else
+                    WindUI:Notify({ Title = "❌ Execution Error", Content = tostring(runErr), Duration = 4 })
+                end
+            else
+                WindUI:Notify({ Title = "❌ Syntax Error", Content = tostring(err), Duration = 4 })
+            end
+        else
+            WindUI:Notify({ Title = "❌ ไม่สามารถดึงไฟล์ได้", Content = "ลิงก์ไม่ถูกต้องหรือเกิดข้อผิดพลาด 404", Duration = 4 })
+        end
+    end
+})
+
+-- =========================================================================
+-- 🤖 หมวดหมู่ที่ 3: AI สร้างสคริปต์ & ดึงสคริปต์ GitHub
+-- =========================================================================
+local TabAI = Window:Tab({ Title = "AI สร้างสคริปต์", Icon = "cpu" })
+local SecAI = TabAI:Section({ Title = "ระบบช่วยเขียนโค้ดและโหลดสคริปต์อัตโนมัติ" })
+
+SecAI:Button({
+    Title = "⚡ ประมวลผลและดึง ServerScriptService จาก GitHub",
+    Callback = function()
+        WindUI:Notify({ Title = "🤖 AI Generator", Content = "กำลังดึงสคริปต์จาก GitHub...", Duration = 3 })
+        
+        local url = "https://raw.githubusercontent.com/hacker0030mp/Delta-executable-/refs/heads/main/ServerScriptService"
+        local getOk, scriptData = pcall(function()
+            return game:HttpGet(url)
+        end)
+
+        if getOk and scriptData and scriptData ~= "" and not string.find(scriptData, "404") then
+            local func, err = loadstring(scriptData)
+            if func then
+                local runOk, runErr = pcall(func)
+                if runOk then
+                    WindUI:Notify({ Title = "✅ โหลดสำเร็จ", Content = "รัน ServerScriptService เรียบร้อยแล้ว", Duration = 3 })
+                else
+                    WindUI:Notify({ Title = "❌ Execution Error", Content = tostring(runErr), Duration = 4 })
+                end
+            else
+                WindUI:Notify({ Title = "❌ Syntax Error", Content = tostring(err), Duration = 4 })
+            end
+        else
+            WindUI:Notify({ Title = "❌ ไม่สามารถดึงไฟล์ได้", Content = "ลิงก์ไม่ถูกต้องหรือไฟล์บน GitHub ติด 404", Duration = 4 })
+        end
+    end
+})
+
+-- =========================================================================
+-- 👤 หมวดหมู่ที่ 4: Player (ผู้เล่น)
+-- =========================================================================
+local TabPlayer = Window:Tab({ Title = "Player", Icon = "user" })
+local SecPlayer = TabPlayer:Section({ Title = "ปรับแต่งตัวละคร" })
+
+SecPlayer:Toggle({
+    Title = "⚡ เดินเร็วพิเศษ (WalkSpeed Hack)",
+    Callback = function(state)
+        pcall(function()
+            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = state and 50 or 16
+        end)
+    end
+})
+
+SecPlayer:Toggle({
+    Title = "🦘 กระโดดสูงพิเศษ (JumpPower Hack)",
+    Callback = function(state)
+        pcall(function()
+            game.Players.LocalPlayer.Character.Humanoid.JumpPower = state and 120 or 50
+        end)
+    end
+})
+
+-- =========================================================================
+-- ⚙️ หมวดหมู่ที่ 5: การตั้งค่าระบบ
+-- =========================================================================
+local TabSettings = Window:Tab({ Title = "การตั้งค่าระบบ", Icon = "settings" })
+local SecSettings = TabSettings:Section({ Title = "ตั้งค่า UI และ Delta" })
+
+SecSettings:Toggle({
+    Title = "✨ เปิด/ปิด เอฟเฟกต์หน้าต่าง",
+    Callback = function(state)
+        print("UI Effects:", state)
+    end
+})
+
+-- =========================================================================
+-- ℹ️ หมวดหมู่ที่ 6: ข้อมูลเพิ่มเติม
+-- =========================================================================
+local TabInfo = Window:Tab({ Title = "ข้อมูลเพิ่มเติม", Icon = "info" })
+local SecInfo = TabInfo:Section({ Title = "รายละเอียดค่ายสุรินทร์หยินหยาง" })
+
+SecInfo:Button({
+    Title = "ℹ️ ดูเครดิตผู้จัดทำ",
+    Callback = function()
+        WindUI:Notify({ Title = "เครดิต", Content = "Script Hub จัดทำสำหรับ ค่ายสุรินทร์หยินหยาง", Duration = 4 })
+    end
+})
