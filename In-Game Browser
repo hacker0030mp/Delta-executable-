@@ -1,0 +1,133 @@
+-- สร้างหน้าต่าง In-Game Browser / Documentation Hub ภายใน Roblox Studio
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- ลบ UI เก่าทอนซ้ำ (ถ้ามี)
+if playerGui:FindFirstChild("GameBrowserUI") then
+    playerGui.GameBrowserUI:Destroy()
+end
+
+-- สร้าง ScreenGui หลัก
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "GameBrowserUI"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = playerGui
+
+-- หน้าต่างหลัก (Main Window)
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 600, 0, 400)
+mainFrame.Position = UDim2.new(0.5, -300, 0.5, -200)
+mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = screenGui
+
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 8)
+mainCorner.Parent = mainFrame
+
+-- แถบหัวข้อ (TopBar)
+local topBar = Instance.new("Frame")
+topBar.Size = UDim2.new(1, 0, 0, 35)
+topBar.BackgroundColor3 = Color3.fromRGB(45, 45, 60)
+topBar.BorderSizePixel = 0
+topBar.Parent = mainFrame
+
+local topCorner = Instance.new("UICorner")
+topCorner.CornerRadius = UDim.new(0, 8)
+topCorner.Parent = topBar
+
+-- ข้อความชื่อหัวข้อ
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, -40, 1, 0)
+titleLabel.Position = UDim2.new(0, 10, 0, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "🌐 In-Game Info Browser"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.TextSize = 14
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+titleLabel.Parent = topBar
+
+-- ปุ่มปิดหน้าต่าง (Close Button)
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 25, 0, 25)
+closeButton.Position = UDim2.new(1, -30, 0, 5)
+closeButton.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.TextSize = 12
+closeButton.Font = Enum.Font.GothamBold
+closeButton.Parent = topBar
+
+local closeCorner = Instance.new("UICorner")
+closeCorner.CornerRadius = UDim.new(0, 5)
+closeCorner.Parent = closeButton
+
+closeButton.MouseButton1Click:Connect(function()
+    screenGui.Enabled = false
+end)
+
+-- แถบที่อยู่จำลอง (Address Bar / URL Bar)
+local addressBar = Instance.new("TextBox")
+addressBar.Size = UDim2.new(1, -20, 0, 30)
+addressBar.Position = UDim2.new(0, 10, 0, 45)
+addressBar.BackgroundColor3 = Color3.fromRGB(20, 20, 28)
+addressBar.TextColor3 = Color3.fromRGB(200, 200, 200)
+addressBar.TextSize = 12
+addressBar.Font = Enum.Font.Code
+addressBar.ClearTextOnFocus = false
+addressBar.Text = "https://surin-yinyang-game.internal/home"
+addressBar.Parent = mainFrame
+
+local addressCorner = Instance.new("UICorner")
+addressCorner.CornerRadius = UDim.new(0, 5)
+addressCorner.Parent = addressBar
+
+-- พื้นที่แสดงเนื้อหา (Content Display Area)
+local contentArea = Instance.new("ScrollingFrame")
+contentArea.Size = UDim2.new(1, -20, 1, -90)
+contentArea.Position = UDim2.new(0, 10, 0, 80)
+contentArea.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
+contentArea.BorderSizePixel = 0
+contentArea.ScrollBarThickness = 4
+contentArea.Parent = mainFrame
+
+local contentCorner = Instance.new("UICorner")
+contentCorner.CornerRadius = UDim.new(0, 5)
+contentCorner.Parent = contentArea
+
+-- ข้อความเนื้อหาภายในเว็บจำลอง
+local bodyText = Instance.new("TextLabel")
+bodyText.Size = UDim2.new(1, -20, 1, -20)
+bodyText.Position = UDim2.new(0, 10, 0, 10)
+bodyText.BackgroundTransparency = 1
+bodyText.TextColor3 = Color3.fromRGB(240, 240, 240)
+bodyText.TextSize = 13
+bodyText.Font = Enum.Font.Gotham
+bodyText.TextXAlignment = Enum.TextXAlignment.Left
+bodyText.TextYAlignment = Enum.TextYAlignment.Top
+bodyText.TextWrapped = true
+bodyText.Text = [[ยินดีต้อนรับสู่ระบบ Browser จำลองภายในเกม (In-Game Info Hub)
+
+คุณสามารถใช้ระบบนี้เพื่อ:
+1. แสดงข้อมูล คู่มือ หรือกฎกติกาของเกม
+2. จัดการข้อมูลหรือข้อความประกาศต่างๆ ภายในเซิร์ฟเวอร์
+3. จำลองหน้าต่างระบบค้นหาข้อมูลสำหรับผู้เล่น
+
+พิมพ์ข้อความหรือเลือกหัวข้อที่คุณต้องการดูได้ที่ระบบจัดหมวดหมู่ครับ!]]
+bodyText.Parent = contentArea
+
+-- ระบบจำลองการเปลี่ยนหน้า (Navigation Logic ผ่าน Address Bar)
+addressBar.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        local url = addressBar.Text
+        if url:match("home") then
+            bodyText.Text = "หน้าหลัก (Home Page)\n\nประกาศล่าสุดจากทีมงานค่ายสุรินทร์หยินหยาง..."
+        elseif url:match("rules") then
+            bodyText.Text = "กฎกติกาของเกม (Game Rules):\n- ห้ามใช้โปรแกรมโกง\n- ให้เกียรติผู้เล่นท่านอื่น\n- สนุกสนานร่วมกัน"
+        else
+            bodyText.Text = "กำลังโหลดข้อมูลจาก: " .. url .. "\n\n(นี่คือระบบเบราว์เซอร์จำลองภายในเกม Roblox Studio)"
+        end
+    end
+end)
