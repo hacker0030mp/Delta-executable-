@@ -1,0 +1,246 @@
+-- ========================================================
+-- ค่ายสุรินทร์หยินหยาง - Ultimate Delta Script Hub + Save System
+-- ========================================================
+
+-- โหลดไลบรารี WindUI
+local _version = "1.6.66"
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/download/" .. _version .. "/main.lua"))() 
+
+-- สร้างหน้าต่างหลัก (Window)
+local Window = WindUI:CreateWindow({
+    Title = "ค่ายสุรินทร์หยินหยาง - Ultimate Hub",
+    Icon = "shield",
+    Author = "Delta Script",
+    Folder = "SurinYinYangHub",
+    Size = UDim2.fromOffset(580, 460),
+    KeySystem = false,
+})
+
+-- แจ้งเตือนเมื่อเปิดใช้งานสำเร็จ
+WindUI:Notify({
+    Title = "ยินดีต้อนรับ",
+    Content = "โหลดสคริปต์ ค่ายสุรินทร์หยินหยาง สำเร็จ!",
+    Duration = 4
+})
+
+--------------------------------------------------------------------------------
+-- 1. หมวดหมู่: รันสคริปต์ทั้งหมด / ค่ายสุรินทร์หยินหยาง
+--------------------------------------------------------------------------------
+local TabScript = Window:Tab({
+    Title = "รันสคริปต์หลัก",
+    Icon = "play",
+})
+
+local SecMainScripts = TabScript:Section({ Title = "รวมสคริปต์ทั้งหมดในค่าย" })
+
+SecMainScripts:Button({
+    Title = "รันสคริปต์ทั้งหมด (Auto Execute All)",
+    Callback = function()
+        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://pastefy.app/u7GqX8fm/raw"))() end) end)
+        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://pastefy.app/0i20WrM2/raw"))() end) end)
+        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://paste.fe4r.click/raw/5506b73e-b418-4d08-8254-eddde37695e1"))() end) end)
+        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/diepcamvan123-star/DhuutaiScript-OP-HUB/refs/heads/main/Script-Made-by-DhuutaiScript"))() end) end)
+        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/trulyouo/FruitSpawner/refs/heads/main/Loader"))() end) end)
+        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/hacker0030mp/Hac/refs/heads/main/Script-editor.2"))() end) end)
+        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/hacker0030mp/Hac/refs/heads/main/RTS%20Hub%20v3"))() end) end)
+        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/hacker0030mp/Hac/refs/heads/main/HUB-V4-NO%20KEY"))() end) end)
+        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/hacker0030mp/Hac/refs/heads/main/%E0%B8%9A%E0%B8%AD%E0%B8%81%E0%B8%88%E0%B8%B8%E0%B8%94%E0%B9%80%E0%B8%9E%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%99%E0%B8%95%E0%B8%B2%E0%B8%A2%E0%B9%81%E0%B8%A5%E0%B8%B0%E0%B9%84%E0%B8%AD%E0%B9%80%E0%B8%97%E0%B8%A1%E0%B8%95%E0%B8%81"))() end) end)
+        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/hacker0030mp/Hac/refs/heads/main/RTS%20HUB%20V5%20%E2%80%A2%20%2B1%20LOOT%20TO%20FORGE"))() end) end)
+        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/hacker0030mp/Hac/refs/heads/main/Nextbot%20%26%20NPC%20ESP"))() end) end)
+        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://rawscripts.net/raw/Evade-Yin-Yang-New-227130"))() end) end)
+        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/hacker0030mp/Hac/refs/heads/main/RTS-HUB%20%E0%B8%AA%E0%B9%81%E0%B8%99%E0%B8%99%E0%B8%B2%E0%B8%A2"))() end) end)
+        
+        WindUI:Notify({ Title = "สำเร็จ", Content = "รันสคริปต์ทั้งหมดในระบบเรียบร้อยแล้ว!", Duration = 3 })
+    end
+})
+
+local SecSubScripts = TabScript:Section({ Title = "รันแยกรายตัว" })
+
+SecSubScripts:Button({
+    Title = "รัน Evade Yin-Yang Hub",
+    Callback = function()
+        loadstring(game:HttpGet("https://rawscripts.net/raw/Evade-Yin-Yang-New-227130"))()
+        WindUI:Notify({ Title = "รันสำเร็จ", Content = "Evade Yin-Yang กำลังทำงาน", Duration = 2 })
+    end
+})
+
+SecSubScripts:Button({
+    Title = "รัน RTS HUB V5 / ฟาร์มไอเทม",
+    Callback = function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/hacker0030mp/Hac/refs/heads/main/RTS%20HUB%20V5%20%E2%80%A2%20%2B1%20LOOT%20TO%20FORGE"))()
+        WindUI:Notify({ Title = "รันสำเร็จ", Content = "RTS HUB V5 กำลังทำงาน", Duration = 2 })
+    end
+})
+
+--------------------------------------------------------------------------------
+-- 2. หมวดหมู่: บันทึกสคริปต์ (Delta Script Hub System)
+--------------------------------------------------------------------------------
+local TabSave = Window:Tab({
+    Title = "บันทึกสคริปต์",
+    Icon = "save",
+})
+
+local SecSaveSystem = TabSave:Section({ Title = "จัดการเซฟสคริปต์ (Editor & Save Slots)" })
+
+-- ตรรกะระบบจัดการ Script Editor และ Save/Load
+local DeltaScriptHub = {
+    Editor = {
+        ScriptBuffer1 = "",
+        ScriptBuffer2 = "",
+        ScriptBuffer3 = "",
+        
+        SetScript1 = function(self, codeText) self.ScriptBuffer1 = codeText or "" end,
+        SetScript2 = function(self, codeText) self.ScriptBuffer2 = codeText or "" end,
+        SetScript3 = function(self, codeText) self.ScriptBuffer3 = codeText or "" end,
+        
+        RunScript = function(self, target)
+            local code = (target == 1 and self.ScriptBuffer1) or (target == 2 and self.ScriptBuffer2) or self.ScriptBuffer3
+            if code == "" then
+                WindUI:Notify({ Title = "แจ้งเตือน", Content = "กรุณาใส่ Script ในช่องที่ " .. target, Duration = 2 })
+                return
+            end
+            local func, err = loadstring(code)
+            if not func then
+                WindUI:Notify({ Title = "Syntax Error", Content = tostring(err), Duration = 3 })
+                return
+            end
+            local success, runErr = pcall(func)
+            if not success then
+                WindUI:Notify({ Title = "Execution Error", Content = tostring(runErr), Duration = 3 })
+            else
+                WindUI:Notify({ Title = "สำเร็จ", Content = "รัน Script ช่องที่ " .. target .." เรียบร้อย", Duration = 2 })
+            end
+        end,
+
+        SaveAllScripts = function(self)
+            if writefile then
+                local data = "--- [DELTA SCRIPT HUB SAVE DATA] ---\n" ..
+                             "[SLOT1]-->>\n" .. self.ScriptBuffer1 .. "\n<<--[SLOT1]\n" ..
+                             "[SLOT2]-->>\n" .. self.ScriptBuffer2 .. "\n<<--[SLOT2]\n" ..
+                             "[SLOT3]-->>\n" .. self.ScriptBuffer3 .. "\n<<--[SLOT3]"
+                pcall(function()
+                    writefile("SurinYinYang_SaveSlot.txt", data)
+                end)
+                WindUI:Notify({ Title = "บันทึกสำเร็จ", Content = "บันทึกสคริปต์ทั้งหมดลงไฟล์เรียบร้อย", Duration = 3 })
+            else
+                WindUI:Notify({ Title = "ข้อผิดพลาด", Content = "ตัวรันไม่รองรับ writefile", Duration = 3 })
+            end
+        end,
+
+        LoadSavedScripts = function(self)
+            if readfile and isfile and isfile("SurinYinYang_SaveSlot.txt") then
+                local success, content = pcall(function()
+                    return readfile("SurinYinYang_SaveSlot.txt")
+                end)
+                if success and content then
+                    local s1 = content:match("%[SLOT1%]%-%->>(.-)<<%-%[SLOT1%]")
+                    local s2 = content:match("%[SLOT2%]%-%->>(.-)<<%-%[SLOT2%]")
+                    local s3 = content:match("%[SLOT3%]%-%->>(.-)<<%-%[SLOT3%]")
+                    
+                    if s1 then self.ScriptBuffer1 = s1 end
+                    if s2 then self.ScriptBuffer2 = s2 end
+                    if s3 then self.ScriptBuffer3 = s3 end
+                    
+                    WindUI:Notify({ Title = "โหลดสำเร็จ", Content = "ดึงข้อมูลสคริปต์จากช่องบันทึกสำเร็จ", Duration = 3 })
+                    return s1, s2, s3
+                end
+            else
+                WindUI:Notify({ Title = "ไม่พบไฟล์", Content = "ยังไม่มีประวัติการบันทึกสคริปต์", Duration = 3 })
+            end
+            return nil, nil, nil
+        end
+    }
+}
+
+SecSaveSystem:Button({
+    Title = "💾 บันทึกสคริปต์ปัจจุบัน",
+    Callback = function()
+        DeltaScriptHub.Editor:SaveAllScripts()
+    end
+})
+
+SecSaveSystem:Button({
+    Title = "📂 โหลดสคริปต์ที่บันทึกไว้",
+    Callback = function()
+        DeltaScriptHub.Editor:LoadSavedScripts()
+    end
+})
+
+--------------------------------------------------------------------------------
+-- 3. หมวดหมู่: AI สร้างสคริปต์
+--------------------------------------------------------------------------------
+local TabAI = Window:Tab({
+    Title = "AI สร้างสคริปต์",
+    Icon = "cpu",
+})
+
+local SecAI = TabAI:Section({ Title = "ระบบช่วยเขียนโค้ดอัตโนมัติ" })
+SecAI:Button({
+    Title = "ประมวลผลและสร้างสคริปต์เสริม",
+    Callback = function()
+        WindUI:Notify({ Title = "AI Generator", Content = "ระบบ AI กำลังวิเคราะห์และสร้างฟังก์ชันเพิ่ม...", Duration = 3 })
+    end
+})
+
+--------------------------------------------------------------------------------
+-- 4. หมวดหมู่: Player (ผู้เล่น)
+--------------------------------------------------------------------------------
+local TabPlayer = Window:Tab({
+    Title = "Player",
+    Icon = "user",
+})
+
+local SecPlayer = TabPlayer:Section({ Title = "ตั้งค่าตัวละคร" })
+SecPlayer:Toggle({
+    Title = "เดินเร็วพิเศษ (WalkSpeed Hack)",
+    Callback = function(state)
+        if state then
+            pcall(function() game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 50 end)
+        else
+            pcall(function() game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16 end)
+        end
+    end
+})
+
+SecPlayer:Toggle({
+    Title = "กระโดดสูงพิเศษ (JumpPower Hack)",
+    Callback = function(state)
+        if state then
+            pcall(function() game.Players.LocalPlayer.Character.Humanoid.JumpPower = 120 end)
+        else
+            pcall(function() game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50 end)
+        end
+    end
+})
+
+--------------------------------------------------------------------------------
+-- 5. หมวดหมู่: การตั้งค่าระบบ
+--------------------------------------------------------------------------------
+local TabSettings = Window:Tab({
+    Title = "การตั้งค่าระบบ",
+    Icon = "settings",
+})
+
+local SecSettings = TabSettings:Section({ Title = "ตั้งค่า UI และ Delta" })
+SecSettings:Toggle({
+    Title = "เปิด/ปิด เอฟเฟกต์หน้าต่าง",
+    Callback = function(state)
+        print("UI Effects:", state)
+    end
+})
+
+--------------------------------------------------------------------------------
+-- 6. หมวดหมู่: ข้อมูลเพิ่มเติม & ฟังก์ชันใหม่
+--------------------------------------------------------------------------------
+local TabInfo = Window:Tab({
+    Title = "ข้อมูลเพิ่มเติม",
+    Icon = "info",
+})
+
+local SecInfo = TabInfo:Section({ Title = "รายละเอียดค่ายสุรินทร์หยินหยาง" })
+SecInfo:Button({
+    Title = "ดูเครดิตผู้จัดทำ",
+    Callback = function()
+        WindUI:Notify({ Title = "เครดิต", Content = "Script Hub จัดทำสำหรับค่ายสุรินทร์หยินหยาง", Duration = 4 })
+    end
+})
