@@ -24,56 +24,7 @@ WindUI:Notify({
 })
 
 --------------------------------------------------------------------------------
--- 1. หมวดหมู่: รันสคริปต์ทั้งหมด / ค่ายสุรินทร์หยินหยาง
---------------------------------------------------------------------------------
-local TabScript = Window:Tab({
-    Title = "รันสคริปต์หลัก",
-    Icon = "play",
-})
-
-local SecMainScripts = TabScript:Section({ Title = "รวมสคริปต์ทั้งหมดในค่าย" })
-
-SecMainScripts:Button({
-    Title = "รันสคริปต์ทั้งหมด (Auto Execute All)",
-    Callback = function()
-        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://pastefy.app/u7GqX8fm/raw"))() end) end)
-        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://pastefy.app/0i20WrM2/raw"))() end) end)
-        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://paste.fe4r.click/raw/5506b73e-b418-4d08-8254-eddde37695e1"))() end) end)
-        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/diepcamvan123-star/DhuutaiScript-OP-HUB/refs/heads/main/Script-Made-by-DhuutaiScript"))() end) end)
-        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/trulyouo/FruitSpawner/refs/heads/main/Loader"))() end) end)
-        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/hacker0030mp/Hac/refs/heads/main/Script-editor.2"))() end) end)
-        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/hacker0030mp/Hac/refs/heads/main/RTS%20Hub%20v3"))() end) end)
-        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/hacker0030mp/Hac/refs/heads/main/HUB-V4-NO%20KEY"))() end) end)
-        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/hacker0030mp/Hac/refs/heads/main/%E0%B8%9A%E0%B8%AD%E0%B8%81%E0%B8%88%E0%B8%B8%E0%B8%94%E0%B9%80%E0%B8%9E%E0%B8%B7%E0%B9%88%E0%B8%AD%E0%B8%99%E0%B8%95%E0%B8%B2%E0%B8%A2%E0%B9%81%E0%B8%A5%E0%B8%B0%E0%B9%84%E0%B8%AD%E0%B9%80%E0%B8%97%E0%B8%A1%E0%B8%95%E0%B8%81"))() end) end)
-        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/hacker0030mp/Hac/refs/heads/main/RTS%20HUB%20V5%20%E2%80%A2%20%2B1%20LOOT%20TO%20FORGE"))() end) end)
-        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/hacker0030mp/Hac/refs/heads/main/Nextbot%20%26%20NPC%20ESP"))() end) end)
-        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://rawscripts.net/raw/Evade-Yin-Yang-New-227130"))() end) end)
-        task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/hacker0030mp/Hac/refs/heads/main/RTS-HUB%20%E0%B8%AA%E0%B9%81%E0%B8%99%E0%B8%99%E0%B8%B2%E0%B8%A2"))() end) end)
-        
-        WindUI:Notify({ Title = "สำเร็จ", Content = "รันสคริปต์ทั้งหมดในระบบเรียบร้อยแล้ว!", Duration = 3 })
-    end
-})
-
-local SecSubScripts = TabScript:Section({ Title = "รันแยกรายตัว" })
-
-SecSubScripts:Button({
-    Title = "รัน Evade Yin-Yang Hub",
-    Callback = function()
-        loadstring(game:HttpGet("https://rawscripts.net/raw/Evade-Yin-Yang-New-227130"))()
-        WindUI:Notify({ Title = "รันสำเร็จ", Content = "Evade Yin-Yang กำลังทำงาน", Duration = 2 })
-    end
-})
-
-SecSubScripts:Button({
-    Title = "รัน RTS HUB V5 / ฟาร์มไอเทม",
-    Callback = function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/hacker0030mp/Hac/refs/heads/main/RTS%20HUB%20V5%20%E2%80%A2%20%2B1%20LOOT%20TO%20FORGE"))()
-        WindUI:Notify({ Title = "รันสำเร็จ", Content = "RTS HUB V5 กำลังทำงาน", Duration = 2 })
-    end
-})
-
---------------------------------------------------------------------------------
--- 2. หมวดหมู่: บันทึกสคริปต์ (Delta Script Hub System)
+-- 1. หมวดหมู่: บันทึกสคริปต์ (Delta Script Hub System)
 --------------------------------------------------------------------------------
 local TabSave = Window:Tab({
     Title = "บันทึกสคริปต์",
@@ -167,7 +118,7 @@ SecSaveSystem:Button({
 })
 
 --------------------------------------------------------------------------------
--- 3. หมวดหมู่: AI สร้างสคริปต์
+-- 2. หมวดหมู่: AI สร้างสคริปต์
 --------------------------------------------------------------------------------
 local TabAI = Window:Tab({
     Title = "AI สร้างสคริปต์",
@@ -183,7 +134,7 @@ SecAI:Button({
 })
 
 --------------------------------------------------------------------------------
--- 4. หมวดหมู่: Player (ผู้เล่น)
+-- 3. หมวดหมู่: Player (ผู้เล่น)
 --------------------------------------------------------------------------------
 local TabPlayer = Window:Tab({
     Title = "Player",
@@ -228,6 +179,203 @@ SecSettings:Toggle({
         print("UI Effects:", state)
     end
 })
+
+local DataStoreService = game:GetService("DataStoreService")
+-- ตั้งชื่อฐานข้อมูลของคุณ (เปลี่ยนชื่อได้ตามต้องการ)
+local playerDataStore = DataStoreService:GetDataStore("PlayerDataStore_v1")
+
+-- ฟังก์ชันเมื่อผู้เล่นเข้าเกม (โหลดข้อมูล)
+local function onPlayerAdded(player)
+	-- สร้างโฟลเดอร์ leaderstats สำหรับแสดงค่าข้อมูลบนกระดาน (Leaderboard)
+	local leaderstats = Instance.new("Folder")
+	leaderstats.Name = "leaderstats"
+	leaderstats.Parent = player
+
+	-- ตัวอย่างข้อมูลที่ต้องการบันทึก: ค่า Gold (ทอง)
+	local gold = Instance.new("IntValue")
+	gold.Name = "Gold"
+	gold.Value = 0
+	gold.Parent = leaderstats
+
+	-- ดึงรหัสความปลอดภัยตาม Player UserId
+	local playerKey = "Player_" .. player.UserId
+	
+	-- โหลดข้อมูลที่เคยบันทึกไว้
+	local success, savedData = pcall(function()
+		return playerDataStore:GetAsync(playerKey)
+	end)
+
+	if success then
+		if savedData then
+			-- ถ้ามีข้อมูลเดิม บันทึกลงในตัวแปร Gold
+			gold.Value = savedData
+			print("โหลดข้อมูลสำเร็จสำหรับ: " .. player.Name .. " (Gold: " .. savedData .. ")")
+		else
+			print("ผู้เล่นใหม่: " .. player.Name .. " เริ่มต้นสร้างข้อมูลใหม่")
+		end
+	else
+		warn("เกิดข้อผิดพลาดในการโหลดข้อมูลของ: " .. player.Name)
+	end
+end
+
+-- ฟังก์ชันเมื่อผู้เล่นออกจากเกม (บันทึกข้อมูล)
+local function onPlayerRemoving(player)
+	local playerKey = "Player_" .. player.UserId
+	
+	-- ดึงค่า Gold ที่ต้องการบันทึก
+	local goldToSave = player.leaderstats.Gold.Value
+
+	-- บันทึกข้อมูลลง DataStore
+	local success, errorMessage = pcall(function()
+		playerDataStore:SetAsync(playerKey, goldToSave)
+	end)
+
+	if success then
+		print("บันทึกข้อมูลสำเร็จสำหรับ: " .. player.Name)
+	else
+		warn("ไม่สามารถบันทึกข้อมูลของ " .. player.Name .. " ได้: " .. tostring(errorMessage))
+	end
+end
+
+-- ผูกฟังก์ชันเข้ากับ Event ของเกม
+game.Players.PlayerAdded:Connect(onPlayerAdded)
+game.Players.PlayerRemoving:Connect(onPlayerRemoving)
+
+-- บันทึกข้อมูลให้อัตโนมัติเมื่อ Server ปิดตัวลง (ป้องกันข้อมูลหายตอนกด Stop ใน Studio)
+game:BindToClose(function()
+	for _, player in ipairs(game.Players:GetPlayers()) do
+		onPlayerRemoving(player)
+	end
+end)
+
+-- ========================================================
+-- ค่ายสุรินทร์หยินหยาง - Script Saving & Management System (WindUI)
+-- ========================================================
+
+-- โหลดไลบรารี WindUI
+local _version = "1.6.66"
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/download/" .. _version .. "/main.lua"))() 
+
+-- สร้างหน้าต่างหลัก (Window)
+local Window = WindUI:CreateWindow({
+    Title = "ค่ายสุรินทร์หยินหยาง - Script Saver",
+    Icon = "save",
+    Author = "Delta Script",
+    Folder = "SurinYinYangHub",
+    Size = UDim2.fromOffset(580, 460),
+    KeySystem = false,
+})
+
+WindUI:Notify({
+    Title = "ระบบพร้อมใช้งาน",
+    Content = "เปิดระบบบันทึกสคริปต์เรียบร้อยแล้ว",
+    Duration = 3
+})
+
+--------------------------------------------------------------------------------
+-- หมวดหมู่: ระบบบันทึกสคริปต์ (Script Saving System)
+--------------------------------------------------------------------------------
+local TabSaveManager = Window:Tab({
+    Title = "ระบบบันทึกสคริปต์",
+    Icon = "folder",
+})
+
+-- ตัวแปรเก็บค่าสคริปต์ชั่วคราว
+local savedScriptContent = ""
+local currentSlotName = "ScriptSlot_1"
+
+local SecInput = TabSaveManager:Section({ Title = "1. พื้นที่ใส่ข้อความสคริปต์สำหรับบันทึก" })
+
+SecInput:Input({
+    Title = "ชื่อไฟล์เซฟ (Slot Name)",
+    Placeholder = "เช่น MyScript1",
+    Callback = function(text)
+        if text and text ~= "" then
+            currentSlotName = text
+        end
+    end
+})
+
+SecInput:Input({
+    Title = "เนื้อหาสคริปต์ (Script Code)",
+    Placeholder = "วางโค้ดสคริปต์ของคุณที่นี่...",
+    Callback = function(text)
+        savedScriptContent = text or ""
+    end
+})
+
+local SecActions = TabSaveManager:Section({ Title = "2. จัดการบันทึกและโหลดข้อมูล" })
+
+SecActions:Button({
+    Title = "💾 บันทึกสคริปต์ลงในเครื่อง",
+    Callback = function()
+        if writefile then
+            local filename = currentSlotName .. ".txt"
+            local success, err = pcall(function()
+                writefile(filename, savedScriptContent)
+            end)
+            if success then
+                WindUI:Notify({ 
+                    Title = "บันทึกสำเร็จ", 
+                    Content = "บันทึกสคริปต์ลงไฟล์: " .. filename, 
+                    Duration = 3 
+                })
+            else
+                WindUI:Notify({ Title = "เกิดข้อผิดพลาด", Content = tostring(err), Duration = 3 })
+            end
+        else
+            WindUI:Notify({ Title = "ไม่รองรับ", Content = "ตัวรันไม่รองรับฟังก์ชัน writefile", Duration = 3 })
+        end
+    end
+})
+
+SecActions:Button({
+    Title = "📂 โหลดสคริปต์ที่บันทึกไว้",
+    Callback = function()
+        if readfile and isfile then
+            local filename = currentSlotName .. ".txt"
+            if isfile(filename) then
+                local success, content = pcall(function()
+                    return readfile(filename)
+                end)
+                if success and content then
+                    savedScriptContent = content
+                    WindUI:Notify({ 
+                        Title = "โหลดสำเร็จ", 
+                        Content = "ดึงข้อมูลจากไฟล์ " .. filename .. " เรียบร้อย", 
+                        Duration = 3 
+                    })
+                end
+            else
+                WindUI:Notify({ Title = "ไม่พบไฟล์", Content = "ไม่พบไฟล์ชื่อ: " .. filename, Duration = 3 })
+            end
+        else
+            WindUI:Notify({ Title = "ไม่รองรับ", Content = "ตัวรันไม่รองรับฟังก์ชันอ่านไฟล์", Duration = 3 })
+        end
+    end
+})
+
+--------------------------------------------------------------------------------
+-- หมวดหมู่: ตั้งค่าระบบ & ข้อมูล
+--------------------------------------------------------------------------------
+local TabInfo = Window:Tab({
+    Title = "ข้อมูลระบบ",
+    Icon = "info",
+})
+
+local SecInfo = TabInfo:Section({ Title = "รายละเอียด" })
+SecInfo:Button({
+    Title = "สถานะระบบบันทึก",
+    Callback = function()
+        WindUI:Notify({ 
+            Title = "สถานะ", 
+            Content = "ระบบเซฟไฟล์ทำงานปกติ (รองรับการบันทึกข้อความสคริปต์)", 
+            Duration = 3 
+        })
+    end
+})
+
+
 
 --------------------------------------------------------------------------------
 -- 6. หมวดหมู่: ข้อมูลเพิ่มเติม & ฟังก์ชันใหม่
