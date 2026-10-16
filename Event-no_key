@@ -1,0 +1,312 @@
+-- =========================================
+-- KOMAT Hub - Delta Executor Version
+-- =========================================
+
+-- โหลด Library สำหรับ Delta
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/x2zu/OPEN-SOURCE-UI-ROBLOX/refs/heads/main/X2ZU%20UI%20ROBLOX%20OPEN%20SOURCE/DummyUi-leak-by-x2zu/fetching-main/Tools/Framework.luau"))()
+
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local PlayerGui = player:WaitForChild("PlayerGui")
+
+-- =========================
+-- Main Window
+-- =========================
+local Window = Library:CreateWindow({
+    Title = "KOMAT Hub | Delta",
+    Desc  = "Evade Hub on top",
+})
+
+-- =========================
+-- Tabs
+-- =========================
+local SettingsTab = Window:Tab("ตั้งค่า")
+local MainTab     = Window:Tab("เมนูหลัก")
+local TeleportTab = Window:Tab("เทเลพอร์ต")
+local VisualsTab  = Window:Tab("มองต่างๆ")
+local ExtraTab    = Window:Tab("ของเสริม")
+local FPSTab      = Window:Tab("FPS")
+local EventTab    = Window:Tab("เกี่ยวกับอีเว้น")
+
+-- =========================
+-- Floating GUI Setup
+-- =========================
+local FloatingGui = PlayerGui:FindFirstChild("EvadeFloatingGui")
+if not FloatingGui then
+    FloatingGui = Instance.new("ScreenGui")
+    FloatingGui.Name = "EvadeFloatingGui"
+    FloatingGui.Parent = PlayerGui
+    FloatingGui.ResetOnSpawn = false
+    FloatingGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+end
+
+-- =========================
+-- Auto Bhop (No Ground Touch)
+-- =========================
+local autoBhop = false
+local floatingBhopButton
+
+local function createBhopFloatingButton()
+    if floatingBhopButton then return end
+    floatingBhopButton = Instance.new("TextButton")
+    floatingBhopButton.Size = UDim2.new(0,120,0,50)
+    floatingBhopButton.Position = UDim2.new(0.3,-60,0.8,0)
+    floatingBhopButton.AnchorPoint = Vector2.new(0.5,0)
+    floatingBhopButton.BackgroundColor3 = Color3.fromRGB(0,170,255)
+    floatingBhopButton.TextColor3 = Color3.fromRGB(255,255,255)
+    floatingBhopButton.Text = "Auto Bhop: OFF"
+    floatingBhopButton.Parent = FloatingGui
+    floatingBhopButton.Active = true
+    floatingBhopButton.Draggable = true
+    floatingBhopButton.MouseButton1Click:Connect(function()
+        autoBhop = not autoBhop
+        floatingBhopButton.Text = autoBhop and "Auto Bhop: ON" or "Auto Bhop: OFF"
+    end)
+end
+
+local function removeBhopFloatingButton()
+    if floatingBhopButton then
+        floatingBhopButton:Destroy()
+        floatingBhopButton = nil
+    end
+end
+
+MainTab:Toggle({
+    Title = "ออโต้กระโดด (ปกติ)",
+    Desc = "เด้งขึ้นอัตโนมัติแบบไม่แตะพื้น",
+    Value = false,
+    Callback = function(state)
+        autoBhop = state
+    end
+})
+
+MainTab:Toggle({
+    Title = "ออโต้กระโดด (ปุ่มลอย)",
+    Desc = "แสดงปุ่มลอยสำหรับ Auto Bhop",
+    Value = false,
+    Callback = function(state)
+        if state then createBhopFloatingButton() else removeBhopFloatingButton(); autoBhop = false end
+    end
+})
+
+task.spawn(function()
+    local rayDistance = 4
+    while true do
+        RunService.Heartbeat:Wait()
+        if autoBhop then
+            local char = player.Character
+            if char then
+                local humanoid = char:FindFirstChildOfClass("Humanoid")
+                local root = char:FindFirstChild("HumanoidRootPart")
+                if humanoid and root then
+                    local rayOrigin = root.Position
+                    local rayDir = Vector3.new(0, -rayDistance, 0)
+                    local ray = Ray.new(rayOrigin, rayDir)
+                    local hit, pos = workspace:FindPartOnRay(ray, char)
+                    if hit then
+                        humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+                    end
+                end
+            end
+        end
+    end
+end)
+
+-- =========================
+-- Lag Switch
+-- =========================
+local floatingLagButton
+local function lagSwitch(duration)
+    local start = tick()
+    while tick() - start < duration do
+        for i = 1, 1e7 do local a = math.random() end
+    end
+end
+
+MainTab:Button({
+    Title = "Lag Switch (ปกติ)",
+    Desc = "กดแล้วค้างกระตุก 0.5 วินาที",
+    Callback = function() lagSwitch(0.5) end
+})
+
+local function createLagFloatingButton()
+    if floatingLagButton then return end
+    floatingLagButton = Instance.new("TextButton")
+    floatingLagButton.Size = UDim2.new(0,100,0,50)
+    floatingLagButton.Position = UDim2.new(0.7,-50,0.8,0)
+    floatingLagButton.AnchorPoint = Vector2.new(0.5,0)
+    floatingLagButton.BackgroundColor3 = Color3.fromRGB(255,100,0)
+    floatingLagButton.TextColor3 = Color3.fromRGB(255,255,255)
+    floatingLagButton.Text = "Lag Switch"
+    floatingLagButton.Parent = FloatingGui
+    floatingLagButton.Active = true
+    floatingLagButton.Draggable = true
+    floatingLagButton.MouseButton1Click:Connect(function() lagSwitch(0.5) end)
+end
+
+local function removeLagFloatingButton()
+    if floatingLagButton then
+        floatingLagButton:Destroy()
+        floatingLagButton = nil
+    end
+end
+
+MainTab:Toggle({
+    Title = "Lag Switch (ปุ่มลอย)",
+    Desc = "แสดงปุ่มลอยบนหน้าจอสำหรับ Lag Switch",
+    Value = false,
+    Callback = function(state)
+        if state then createLagFloatingButton() else removeLagFloatingButton() end
+    end
+})
+
+-- =========================
+-- Auto Bounce (แม่นยำสูง)
+-- =========================
+local autoBounce = false
+local floatingBounceButton
+local bouncePower = 100
+local groundCheckDistance = 6
+
+task.spawn(function()
+    while true do
+        if autoBounce then
+            local char = player.Character
+            if char then
+                local root = char:FindFirstChild("HumanoidRootPart")
+                local humanoid = char:FindFirstChildOfClass("Humanoid")
+                if root and humanoid then
+                    local rayOrigin = root.Position
+                    local rayDirection = Vector3.new(0, -groundCheckDistance, 0)
+                    local raycastParams = RaycastParams.new()
+                    raycastParams.FilterDescendantsInstances = {char}
+                    raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+
+                    local ray = workspace:Raycast(rayOrigin, rayDirection, raycastParams)
+                    if ray and root.Velocity.Y < 0 then
+                        root.Velocity = Vector3.new(root.Velocity.X, bouncePower, root.Velocity.Z)
+                    end
+                end
+            end
+        end
+        task.wait(0.03)
+    end
+end)
+
+MainTab:Toggle({
+    Title = "ออโต้เด้ง (ปกติ)",
+    Desc = "เด้งอัตโนมัติเมื่อกำลังตกและใกล้พื้น",
+    Value = false,
+    Callback = function(state) autoBounce = state end
+})
+
+local function createBounceFloatingButton()
+    if floatingBounceButton then return end
+    floatingBounceButton = Instance.new("TextButton")
+    floatingBounceButton.Size = UDim2.new(0,100,0,50)
+    floatingBounceButton.Position = UDim2.new(0.5,-50,0.85,0)
+    floatingBounceButton.AnchorPoint = Vector2.new(0.5,0)
+    floatingBounceButton.BackgroundColor3 = Color3.fromRGB(255,0,150)
+    floatingBounceButton.TextColor3 = Color3.fromRGB(255,255,255)
+    floatingBounceButton.Text = autoBounce and "Auto Bounce: ON" or "Auto Bounce: OFF"
+    floatingBounceButton.Parent = FloatingGui
+    floatingBounceButton.Active = true
+    floatingBounceButton.Draggable = true
+    floatingBounceButton.MouseButton1Click:Connect(function()
+        autoBounce = not autoBounce
+        floatingBounceButton.Text = autoBounce and "Auto Bounce: ON" or "Auto Bounce: OFF"
+    end)
+end
+
+MainTab:Toggle({
+    Title = "ออโต้เด้ง (ปุ่มลอย)",
+    Desc = "แสดงปุ่มลอยสำหรับ Auto Bounce",
+    Value = false,
+    Callback = function(state)
+        if state then createBounceFloatingButton() else
+            if floatingBounceButton then floatingBounceButton:Destroy(); floatingBounceButton = nil end
+            autoBounce = false
+        end
+    end
+})
+
+-- =========================
+-- Auto Respawn (Fake Revive)
+-- =========================
+getgenv().AutoRespawnEnabled = false
+local autoRespawnMethod = "Fake Revive"
+local respawnConnection
+local lastSavedPosition
+local floatingRespawnButton
+
+local function createRespawnFloatingButton()
+    if floatingRespawnButton then return end
+    floatingRespawnButton = Instance.new("TextButton")
+    floatingRespawnButton.Size = UDim2.new(0,120,0,50)
+    floatingRespawnButton.Position = UDim2.new(0.8,0,0.8,0)
+    floatingRespawnButton.BackgroundColor3 = Color3.fromRGB(255,80,80)
+    floatingRespawnButton.TextColor3 = Color3.new(1,1,1)
+    floatingRespawnButton.Font = Enum.Font.GothamBold
+    floatingRespawnButton.Text = "Auto Respawn"
+    floatingRespawnButton.Parent = FloatingGui
+    floatingRespawnButton.ZIndex = 10
+    floatingRespawnButton.Active = true
+    floatingRespawnButton.Draggable = true
+    floatingRespawnButton.MouseButton1Click:Connect(function()
+        getgenv().AutoRespawnEnabled = not getgenv().AutoRespawnEnabled
+        floatingRespawnButton.BackgroundColor3 = getgenv().AutoRespawnEnabled and Color3.fromRGB(80,255,80) or Color3.fromRGB(255,80,80)
+    end)
+end
+
+local function removeRespawnFloatingButton()
+    if floatingRespawnButton then
+        floatingRespawnButton:Destroy()
+        floatingRespawnButton = nil
+    end
+end
+
+local function setupAutoRevive(character)
+    task.defer(function()
+        character:WaitForChild("HumanoidRootPart", 5)
+        character:WaitForChild("Humanoid", 5)
+        task.spawn(function()
+            while character and character.Parent do
+                local hrp = character:FindFirstChild("HumanoidRootPart")
+                if hrp then
+                    character:SetAttribute("LastPosition", hrp.Position)
+                end
+                task.wait(0.2)
+            end
+        end)
+
+        character:GetAttributeChangedSignal("Downed"):Connect(function()
+            if not getgenv().AutoRespawnEnabled then return end
+            if character:GetAttribute("Downed") ~= true then return end
+            if autoRespawnMethod ~= "Fake Revive" then return end
+
+            local hrp = character:FindFirstChild("HumanoidRootPart")
+            if hrp then lastSavedPosition = hrp.Position end
+
+            task.wait(3)
+            local start = tick()
+            repeat
+                pcall(function()
+                    game:GetService("ReplicatedStorage"):WaitForChild("Events", 9e9)
+                        :WaitForChild("Player", 9e9)
+                        :WaitForChild("ChangePlayerMode", 9e9)
+                        :FireServer(true)
+                end)
+                task.wait(1)
+            until character:GetAttribute("Downed") ~= true or tick() - start > 1
+
+            local newChar
+            repeat
+                newChar = Players.LocalPlayer.Character
+                task.wait()
+            until newChar and newChar:FindFirstChild("HumanoidRootPart")
+
+            local newHRP = newChar:FindFirstChild("HumanoidRootPart")
+            if lastSavedPosition and newHRP then
+                new
