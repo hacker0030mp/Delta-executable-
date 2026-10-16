@@ -1,0 +1,126 @@
+-- ========================================================
+-- ค่ายสุรินทร์หยินหยาง - Script Saving & Management System (WindUI)
+-- ========================================================
+
+-- โหลดไลบรารี WindUI
+local _version = "1.6.66"
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/download/" .. _version .. "/main.lua"))() 
+
+-- สร้างหน้าต่างหลัก (Window)
+local Window = WindUI:CreateWindow({
+    Title = "ค่ายสุรินทร์หยินหยาง - Script Saver",
+    Icon = "save",
+    Author = "Delta Script",
+    Folder = "SurinYinYangHub",
+    Size = UDim2.fromOffset(580, 460),
+    KeySystem = false,
+})
+
+WindUI:Notify({
+    Title = "ระบบพร้อมใช้งาน",
+    Content = "เปิดระบบบันทึกสคริปต์เรียบร้อยแล้ว",
+    Duration = 3
+})
+
+--------------------------------------------------------------------------------
+-- หมวดหมู่: ระบบบันทึกสคริปต์ (Script Saving System)
+--------------------------------------------------------------------------------
+local TabSaveManager = Window:Tab({
+    Title = "ระบบบันทึกสคริปต์",
+    Icon = "folder",
+})
+
+-- ตัวแปรเก็บค่าสคริปต์ชั่วคราว
+local savedScriptContent = ""
+local currentSlotName = "ScriptSlot_1"
+
+local SecInput = TabSaveManager:Section({ Title = "1. พื้นที่ใส่ข้อความสคริปต์สำหรับบันทึก" })
+
+SecInput:Input({
+    Title = "ชื่อไฟล์เซฟ (Slot Name)",
+    Placeholder = "เช่น MyScript1",
+    Callback = function(text)
+        if text and text ~= "" then
+            currentSlotName = text
+        end
+    end
+})
+
+SecInput:Input({
+    Title = "เนื้อหาสคริปต์ (Script Code)",
+    Placeholder = "วางโค้ดสคริปต์ของคุณที่นี่...",
+    Callback = function(text)
+        savedScriptContent = text or ""
+    end
+})
+
+local SecActions = TabSaveManager:Section({ Title = "2. จัดการบันทึกและโหลดข้อมูล" })
+
+SecActions:Button({
+    Title = "💾 บันทึกสคริปต์ลงในเครื่อง",
+    Callback = function()
+        if writefile then
+            local filename = currentSlotName .. ".txt"
+            local success, err = pcall(function()
+                writefile(filename, savedScriptContent)
+            end)
+            if success then
+                WindUI:Notify({ 
+                    Title = "บันทึกสำเร็จ", 
+                    Content = "บันทึกสคริปต์ลงไฟล์: " .. filename, 
+                    Duration = 3 
+                })
+            else
+                WindUI:Notify({ Title = "เกิดข้อผิดพลาด", Content = tostring(err), Duration = 3 })
+            end
+        else
+            WindUI:Notify({ Title = "ไม่รองรับ", Content = "ตัวรันไม่รองรับฟังก์ชัน writefile", Duration = 3 })
+        end
+    end
+})
+
+SecActions:Button({
+    Title = "📂 โหลดสคริปต์ที่บันทึกไว้",
+    Callback = function()
+        if readfile and isfile then
+            local filename = currentSlotName .. ".txt"
+            if isfile(filename) then
+                local success, content = pcall(function()
+                    return readfile(filename)
+                end)
+                if success and content then
+                    savedScriptContent = content
+                    WindUI:Notify({ 
+                        Title = "โหลดสำเร็จ", 
+                        Content = "ดึงข้อมูลจากไฟล์ " .. filename .. " เรียบร้อย", 
+                        Duration = 3 
+                    })
+                end
+            else
+                WindUI:Notify({ Title = "ไม่พบไฟล์", Content = "ไม่พบไฟล์ชื่อ: " .. filename, Duration = 3 })
+            end
+        else
+            WindUI:Notify({ Title = "ไม่รองรับ", Content = "ตัวรันไม่รองรับฟังก์ชันอ่านไฟล์", Duration = 3 })
+        end
+    end
+})
+
+--------------------------------------------------------------------------------
+-- หมวดหมู่: ตั้งค่าระบบ & ข้อมูล
+--------------------------------------------------------------------------------
+local TabInfo = Window:Tab({
+    Title = "ข้อมูลระบบ",
+    Icon = "info",
+})
+
+local SecInfo = TabInfo:Section({ Title = "รายละเอียด" })
+SecInfo:Button({
+    Title = "สถานะระบบบันทึก",
+    Callback = function()
+        WindUI:Notify({ 
+            Title = "สถานะ", 
+            Content = "ระบบเซฟไฟล์ทำงานปกติ (รองรับการบันทึกข้อความสคริปต์)", 
+            Duration = 3 
+        })
+    end
+})
