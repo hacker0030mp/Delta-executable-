@@ -1,0 +1,67 @@
+local DataStoreService = game:GetService("DataStoreService")
+-- ตั้งชื่อฐานข้อมูลของคุณ (เปลี่ยนชื่อได้ตามต้องการ)
+local playerDataStore = DataStoreService:GetDataStore("PlayerDataStore_v1")
+
+-- ฟังก์ชันเมื่อผู้เล่นเข้าเกม (โหลดข้อมูล)
+local function onPlayerAdded(player)
+	-- สร้างโฟลเดอร์ leaderstats สำหรับแสดงค่าข้อมูลบนกระดาน (Leaderboard)
+	local leaderstats = Instance.new("Folder")
+	leaderstats.Name = "leaderstats"
+	leaderstats.Parent = player
+
+	-- ตัวอย่างข้อมูลที่ต้องการบันทึก: ค่า Gold (ทอง)
+	local gold = Instance.new("IntValue")
+	gold.Name = "Gold"
+	gold.Value = 0
+	gold.Parent = leaderstats
+
+	-- ดึงรหัสความปลอดภัยตาม Player UserId
+	local playerKey = "Player_" .. player.UserId
+	
+	-- โหลดข้อมูลที่เคยบันทึกไว้
+	local success, savedData = pcall(function()
+		return playerDataStore:GetAsync(playerKey)
+	end)
+
+	if success then
+		if savedData then
+			-- ถ้ามีข้อมูลเดิม บันทึกลงในตัวแปร Gold
+			gold.Value = savedData
+			print("โหลดข้อมูลสำเร็จสำหรับ: " .. player.Name .. " (Gold: " .. savedData .. ")")
+		else
+			print("ผู้เล่นใหม่: " .. player.Name .. " เริ่มต้นสร้างข้อมูลใหม่")
+		end
+	else
+		warn("เกิดข้อผิดพลาดในการโหลดข้อมูลของ: " .. player.Name)
+	end
+end
+
+-- ฟังก์ชันเมื่อผู้เล่นออกจากเกม (บันทึกข้อมูล)
+local function onPlayerRemoving(player)
+	local playerKey = "Player_" .. player.UserId
+	
+	-- ดึงค่า Gold ที่ต้องการบันทึก
+	local goldToSave = player.leaderstats.Gold.Value
+
+	-- บันทึกข้อมูลลง DataStore
+	local success, errorMessage = pcall(function()
+		playerDataStore:SetAsync(playerKey, goldToSave)
+	end)
+
+	if success then
+		print("บันทึกข้อมูลสำเร็จสำหรับ: " .. player.Name)
+	else
+		warn("ไม่สามารถบันทึกข้อมูลของ " .. player.Name .. " ได้: " .. tostring(errorMessage))
+	end
+end
+
+-- ผูกฟังก์ชันเข้ากับ Event ของเกม
+game.Players.PlayerAdded:Connect(onPlayerAdded)
+game.Players.PlayerRemoving:Connect(onPlayerRemoving)
+
+-- บันทึกข้อมูลให้อัตโนมัติเมื่อ Server ปิดตัวลง (ป้องกันข้อมูลหายตอนกด Stop ใน Studio)
+game:BindToClose(function()
+	for _, player in ipairs(game.Players:GetPlayers()) do
+		onPlayerRemoving(player)
+	end
+end)
